@@ -14,3 +14,5 @@ kubectl apply -f evergreen-app-deployment.yaml
 kubectl apply -f prometheus-deployment.yaml
 
 # Only configuration needed is to be done in the grafana UI
+
+# Helm install using value files, secret needs to be installed before grafana
