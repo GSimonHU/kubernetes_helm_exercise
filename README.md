@@ -1,48 +1,19 @@
-# Tinker Tailor Docker Spy
+# Kubernetes and helm exercise
 
-## Story
+In this project, I deployed a previously dockerized Node-js application (evergreen-app), together with Prometheus (system monitoring), and Grafana (visualizing Prometheus metrics), to my already existing cluster on AWS using first Kubernetes and later Helm.
 
-Basically, you got the million dollar idea. It is an application that you made in codecool a while back. However, as every application needs to run somewhere constantly, and as they require a a bigger amount of resources, your laptop just won't cut it. And that is why you're thinking about moving it to cloud. Managing projects on a bigger scale requires cooperation. Even from people you don't know! Using packages from other open source projects could accelerate your progress quite a bit. So you should use other people's packages for Kubernetes deployments. As you can't do those with the default Kubernetes configuration files, how you might ask? The answer is Helm.
+## Kubernetes
+- Grafana: using ConfigMap and Secret, default admin username and password were configured already at deployment (proper secret storing is not implemented yet). Used LoadBalancer service to expose application to the internet.
 
-## What are you going to learn?
+- Prometheus: using ConfigMap, configured data scraping jobs to pull data from evergreen-app and Prometheus itself.
 
-- How to dockerize your application
-- Host your application on k8s
-- How to build a monitoring stack for your app in k8s
-- Use helm effectively to install software to your cluster
+## Helm
+- Grafana:
+    - Helm chart: https://artifacthub.io/packages/helm/grafana/grafana
+    - Secret(proper secret storing is not implemented yet) must be run before the helm chart to configure default admin username and password
+    - Used LoadBalancer service to expose application to the internet.
 
-## Tasks
-
-1. Dockerize an application from any of your projects. It could be any backend project with an endpoint, that can handle requests, and gives back a response.
-    - The application runs successfully inside the container.
-
-2. Upload your image to a registry. 
-    - The image can be found in the registry.
-
-3. Create a k8s yaml config file for your application, and deploy it to the cluster, along with Prometheus and Grafana.
-    - Your application, Prometheus, Grafana are in a running state inside the cluster.
-
-4. Configure your metrics stack to monitor your application, and check it along with your app.
-    - The monitoring information about your application can be successfully checked, and your app also returns a response after calling the endpoint.
-
-5. Upgrade your k8s config files to use Helm
-    - Your application, Prometheus, Grafana are in a running state inside the cluster.
-
-## General requirements
-
-None
-
-## Hints
-
-- Use EKS instead of minikube for making sure that you don't have to host your cluster locally
-- Use ECR for your repository to store your images
-- With Helm, you don't need the source code of the package to install it on your cluster. E.g. you can install Prometheus with ```helm upgrade --install prometheus prometheus-community/prometheus```
-- If you need to include your own variables as arguments to a Helm package, you can use the ```-f``` flag. E.g. ```helm upgrade --install prometheus prometheus-community/prometheus -f values-$BUILD_ENVIRONMENT.yaml```
-- Similar to the ```-f``` flag, you can also include arguments straight from the command line, as opposed to from a yaml file with the ```--set``` flag.
-
-## Background materials
-
-- <i class="far fa-exclamation"></i> [Grafana dashboards](https://grafana.com/grafana/dashboards)
-- <i class="far fa-exclamation"></i> [Introduction to Helm page](project/curriculum/materials/pages/devops/introduction-to-helm.md)
-- <i class="far fa-book-open"></i> [Helm chart template](https://helm.sh/docs/chart_template_guide/)
-- <i class="far fa-exclamation"></i> [Helm vs Kubectl](https://medium.com/@RedBaronDr1/helm-vs-kubectl-5aaf2dba7d71)
+- Prometheus: 
+    - Helm chart: https://artifacthub.io/packages/helm/prometheus-community/prometheus
+    - Only enabled the Promethues server, every other bundled Prometheus service was disabled
+    - Configured data scraping jobs to pull data from evergreen-app and Prometheus itself.
